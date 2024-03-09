@@ -1,0 +1,185 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #F2F8FA;
+  margin: 0;
+  padding: 0;
+}
+.navbar {
+  margin-top: 0 !important;
+}
+.container {
+  max-width: 100%; /* Increase the width as needed */
+  margin: 0px auto;
+  padding: 50px;
+  background-color: #F2F8FA;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.form-group {
+  flex: 1;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"] {
+  width: calc(100% - 30px);
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.calendar-icon {
+  position: absolute;
+  top: 70%;
+  left: 70%;
+  transform: translateY(-50%);
+  right: 10px;
+  cursor: pointer;
+}
+
+.form-group input[type="submit"] {
+  background-color: gray;
+  color: white;
+  padding: 6px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.form-group input[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+/* CSS for the filter */
+.filter-container {
+  margin-bottom: 20px;
+  padding: 20px 30px; /* Add padding */
+}
+
+.filter-container label {
+  margin-right: 10px;
+}
+
+.filter-container input[type="date"] {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.grid-item {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+/* Styling for table headings */
+.heading {
+  font-weight: bold;
+  background-color: #D7EAF1;
+  color: #333;
+}
+
+/* Hover effect */
+.grid-item:hover {
+  background-color: #e6e6e6;
+}
+
+.grid-container {
+  border: 1px solid #ccc;
+  display: grid;
+  grid-template-columns: repeat(7, auto); /* Define 7 columns */
+}
+
+/* Additional styles for the new button container */
+.button-container {
+  display: flex;
+  justify-content: flex-end; /* Align items to the right */
+}
+
+/* Adjust the position of the additional heading */
+.additional-heading {
+  grid-column: 7; /* Set the column to align with the "Date" column */
+}
+
+.edit-dialog {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  padding: 20px;
+  z-index: 1000;
+  width: 1200px; /* Increase width */
+}
+
+.edit-dialog h2 {
+  margin-top: 0;
+
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  color: #333333; /* Text color */
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #cccccc; /* Border color */
+  border-radius: 5px;
+  box-sizing: border-box;
+  color: #333333; /* Text color */
+}
+
+.form-group button {
+  padding: 8px 15px;
+  background-color: #007bff; /* Button color */
+  color: #ffffff; /* Button text color */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.form-group button.cancel {
+  background-color: #dc3545; /* Cancel button color */
+}
+
+.form-row-horizontal {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.form-row-horizontal .form-group {
+  flex: 1;
+  margin-right: 10px; /* Adjust spacing between form fields */
+}
+
+.form-row-horizontal .form-group:last-child {
+  margin-right: 0; /* Remove margin for the last form field */
+}
+
+.form-row-horizontal label {
+  margin-right: 5px; /* Adjust spacing between label and input */
+}
+

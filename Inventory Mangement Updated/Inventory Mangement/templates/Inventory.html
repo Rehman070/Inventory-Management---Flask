@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory - Inventory</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+</head>
+
+<body>
+  <!-- NavBar -->
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div style="background-color: #51A3C0;  padding-top: 10px; padding-bottom: 10px; border-radius: 5px;"
+      class="container-fluid">
+      <a class="navbar-brand" href="/">Stocks</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="inventory">Inventory</a>
+          </li>
+        </ul>
+        <form class="d-flex" role="search">
+          <input style="background-color:#D7EAF1 ;" class="form-control me-2" type="search" placeholder="Search"
+            aria-label="Search">
+          <button style=" width: 100px; margin-left: 10px;padding: 3px;border-radius: 10px; margin-right: 10px;"
+            class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <div class="filter-container">
+    <form id="filterForm" method="POST" action="/inventory">
+      <label for="fromDate">From Date:</label>
+      <input style="background-color:#D7EAF1 ;" type="date" id="fromDate" name="fromDate" required>
+
+      <label for="toDate">To Date:</label>
+      <input style="background-color:#D7EAF1 ;" type="date" id="toDate" name="toDate" required>
+
+      <button style="background-color: #D7EAF1; width: 90px; margin-left: 10px;padding: 4px;border-radius: 10px;"
+        type="submit">Filter</button>
+      <button style="background-color: #D7EAF1; width: 90px; margin-left: 10px;padding: 4px;border-radius: 10px;"
+        type="button" onclick="clearFilter()">Clear</button> <!-- Add clear button -->
+      <button style="background-color: #D7EAF1; width: 90px; margin-left: 10px;padding: 4px;border-radius: 10px;"
+        type="button" onclick="displayGraph()">Graph</button> <!-- Add display graph button -->
+
+
+
+    </form>
+  </div>
+
+  <div class="grid-container">
+    <div class="grid-item heading">Accessories</div>
+    <div class="grid-item heading">Description</div>
+    <div class="grid-item heading">Unit</div>
+    <div class="grid-item heading">Add Value</div>
+    <div class="grid-item heading">Target Value</div>
+    <div class="grid-item heading">Date</div>
+    <!-- Additional heading -->
+    <div class="grid-item heading">Action</div>
+
+    <!-- Iterate over LCD data -->
+    {% for lcds in lcd_data %}
+    <div class="grid-item">{{ lcds.lcd }}</div>
+    <div class="grid-item">{{ lcds.description if lcds.description else 'null' }}</div>
+    <div class="grid-item">{{ lcds.unit }}</div>
+    <div class="grid-item">{{ lcds.add_value }}</div>
+    <div class="grid-item">{{ lcds.target }}</div>
+    <div class="grid-item">{{ lcds.date.strftime('%d-%m-%Y') }}</div> <!-- Format date -->
+    <!-- Additional item -->
+    <div class="grid-item">
+      <div class="button-container">
+        <button onclick="open_lcd_EditForm('{{ lcds.lcd_id }}')"> <i class="fa-solid fa-user-pen fa-xl"
+            style="color: #4000ff; border: none !important;"></i> </button>
+        <button onclick="delete_lcd_row('{{ lcds.lcd_id }}')"> <i class="fa-solid fa-trash fa-xl"
+            style="color: #ed0c18; border: none !important;"></i> </button>
+      </div>
+    </div>
+    {% endfor %}
+
+    <!-- Then, iterate over Keyboard data -->
+    {% for kbddd in kbd_data %}
+    <div class="grid-item">{{ kbddd.kbdd }}</div>
+    <div class="grid-item">{{ kbddd.description if kbddd.description else 'null' }}</div>
+    <div class="grid-item">{{ kbddd.unit }}</div>
+    <div class="grid-item">{{ kbddd.add_value }}</div>
+    <div class="grid-item">{{ kbddd.target }}</div>
+    <div class="grid-item">{{ kbddd.Keyboard_date.strftime('%d-%m-%Y') }}</div> <!-- Format date -->
+    <!-- Additional item -->
+    <div class="grid-item">
+      <div class="button-container">
+        <button onclick="open_kbd_EditForm('{{ kbddd.kb_id }}')"> <i class="fa-solid fa-user-pen fa-xl"
+            style="color: #4000ff; border: none !important;"></i> </button>
+        <button onclick="delete_Keyboard_row('{{ kbddd.kb_id }}')"> <i class="fa-solid fa-trash fa-xl"
+            style="color: #ed0c18; border: none !important;"></i> </button>
+
+      </div>
+    </div>
+    {% endfor %}
+
+    <!-- Then, iterate over Laptop data -->
+    {% for laptop in laptop_data %}
+    <div class="grid-item">{{ laptop.laptop }}</div>
+    <div class="grid-item">{{ laptop.description if laptop.description else 'null' }}</div>
+    <div class="grid-item">{{ laptop.unit }}</div>
+    <div class="grid-item">{{ laptop.add_value }}</div>
+    <div class="grid-item">{{ laptop.target }}</div>
+    <div class="grid-item">{{ laptop.lp_date.strftime('%d-%m-%Y') }}</div> <!-- Format date -->
+    <!-- Additional item -->
+    <div class="grid-item">
+      <div class="button-container">
+        <button onclick="open_laptop_EditForm('{{ laptop.lp_id }}')"> <i class="fa-solid fa-user-pen fa-xl"
+            style="color: #4000ff; border: none !important;"></i> </button>
+        <button onclick="delete_laptop_row('{{ laptop.lp_id }}')"> <i class="fa-solid fa-trash fa-xl"
+            style="color: #ed0c18; border: none !important;"></i> </button>
+      </div>
+    </div>
+    {% endfor %}
+
+    <!-- Display averages -->
+    <div class="grid-item heading">LCD Avg Add Value:<br /> {{ lcd_avg_add_value }}</div>
+    <div class="grid-item heading">LCD Avg Target:<br /> {{ lcd_avg_target }}</div>
+    <div class="grid-item heading">Keyboard Avg Add Value:<br /> {{ kbd_avg_add_value }}</div>
+    <div class="grid-item heading">Keyboard Avg Target:<br /> {{ kbd_avg_target }}</div>
+    <div class="grid-item heading">Laptop Avg Add Value:<br /> {{ laptop_avg_add_value }}</div>
+    <div class="grid-item heading">Laptop Avg Target:<br /> {{ laptop_avg_target }}</div>
+  </div>
+
+
+  <!-- Deteliting Data of LCD -->
+  <script>
+    function delete_lcd_row(lcdId) {
+      // Confirm with the user before deleting
+      if (confirm("Are you sure you want to delete this record?")) {
+        // Construct the URL with the LCD ID
+        var url = "/delete_lcd/" + lcdId;
+
+        // Send the DELETE request
+        fetch(url, {
+          method: "DELETE"
+        })
+          .then(response => {
+            if (response.ok) {
+              // If deletion is successful, reload the page or update the UI as needed
+              location.reload(); // Reload the page
+            } else {
+              // If deletion fails, handle the error
+              console.error("Delete request failed");
+            }
+          })
+          .catch(error => {
+            console.error("Error:", error);
+          });
+      }
+    }
+  </script>
+
+  <!-- Deteliting Data of Keyboard -->
+  <script>
+    function delete_Keyboard_row(kbdId) {
+      // Confirm with the user before deleting
+      if (confirm("Are you sure you want to delete this record?")) {
+        // Construct the URL with the Keyboard ID
+        var url = "/delete_keyboard/" + kbdId;
+
+        // Send the DELETE request
+        fetch(url, {
+          method: "DELETE"
+        })
+          .then(response => {
+            if (response.ok) {
+              // If deletion is successful, reload the page or update the UI as needed
+              location.reload(); // Reload the page
+            } else {
+              // If deletion fails, handle the error
+              console.error("Delete request failed");
+            }
+          })
+          .catch(error => {
+            console.error("Error:", error);
+          });
+      }
+    }
+  </script>
+
+  <!-- Deteliting Data of Laptop -->
+  <script>
+    function delete_laptop_row(LpId) {
+      // Confirm with the user before deleting
+      if (confirm("Are you sure you want to delete this record?")) {
+        // Construct the URL with the Keyboard ID
+        var url = "/delete_laptop/" + LpId;
+        console.log(url)
+
+        // Send the DELETE request
+        fetch(url, {
+          method: "DELETE"
+        })
+          .then(response => {
+            if (response.ok) {
+              // If deletion is successful, reload the page or update the UI as needed
+              location.reload(); // Reload the page
+            } else {
+              // If deletion fails, handle the error
+              console.error("Delete request failed");
+            }
+          })
+          .catch(error => {
+            console.error("Error:", error);
+          });
+      }
+    }
+  </script>
+
+  <!-- Pop-up EditForm for LCD -->
+  <div id="editDialog" class="edit-dialog">
+    <div class="container">
+      <form id="editForm" action="/update_lcd" method="post">
+        <h2>Edit LCD Data</h2>
+        <!-- LCD Data Fields -->
+        <input type="hidden" id="LCDId" name="LCDId" value="">
+        <div class="form-row-horizontal">
+          <!-- LCD Data Fields -->
+          <div class="form-group">
+            <label for="Description">Description:</label>
+            <input type="text" id="Description" placeholder="Enter Description" name="Description">
+          </div>
+          <div class="form-group">
+            <label for="Unit">Unit:</label>
+            <input type="text" id="Unit" placeholder="Enter Unit" name="Unit">
+          </div>
+          <div class="form-group">
+            <label for="AddValue">Add Value:</label>
+            <input type="number" id="AddValue" placeholder="Enter Add Value" name="AddValue" step="any">
+          </div>
+          <div class="form-group">
+            <label for="Target">Target:</label>
+            <input type="number" id="Target" placeholder="Enter Target" name="Target">
+          </div>
+          <div class="form-group position-relative">
+            <label for="LCDDate">Date:</label>
+            <input type="text" id="LCDDate" name="LCDDate" class="form-control datepicker" placeholder="Select Date">
+            <span class="calendar-icon"><i class="far fa-calendar-alt" id="lcdCalendarIcon"></i></span>
+          </div>
+        </div>
+        <!-- Update and Cancel Buttons -->
+        <div class="form-group">
+          <button type="submit" onclick="updateLCD()">Update</button>
+          <button type="button" onclick="hideEditDialog()" class="cancel">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function open_lcd_EditForm(lcdId) {
+      // Populate the form fields with LCD data
+      // You may use AJAX to fetch the data from the server and populate the fields
+      document.getElementById("LCDId").value = lcdId;
+      // Show the pop-up dialog
+      document.getElementById("editDialog").style.display = "block";
+    }
+
+    function hideEditDialog() {
+      // Hide the pop-up dialog
+      document.getElementById("editDialog").style.display = "none";
+    }
+
+    function updateLCD() {
+      // You can add logic here to handle form submission if needed
+      // This function can be used to perform any additional processing before submitting the form
+    }
+  </script>
+
+
+  <!-- Pop-up EditForm for Keyboard -->
+  <div id="kbdEditDialog" class="edit-dialog">
+    <div class="container">
+      <form id="kbdEditForm" action="/update_keyboard" method="post">
+        <h2>Edit Keyboard Data</h2>
+        <!-- Keyboard Data Fields -->
+        <input type="hidden" id="KbdId" name="KbdId" value="">
+        <div class="form-row-horizontal">
+          <!-- Keyboard Data Fields -->
+          <div class="form-group">
+            <label for="Description">Description:</label>
+            <input type="text" id="KbdDescription" placeholder="Enter Description" name="Description">
+          </div>
+          <div class="form-group">
+            <label for="Unit">Unit:</label>
+            <input type="text" id="KbdUnit" placeholder="Enter Unit" name="Unit">
+          </div>
+          <div class="form-group">
+            <label for="AddValue">Add Value:</label>
+            <input type="number" id="KbdAddValue" placeholder="Enter Add Value" name="AddValue" step="any">
+          </div>
+          <div class="form-group">
+            <label for="Target">Target:</label>
+            <input type="number" id="KbdTarget" placeholder="Enter Target" name="Target">
+          </div>
+          <div class="form-group position-relative">
+            <label for="KbdDate">Date:</label>
+            <input type="text" id="KeyboardDate" name="KeyboardDate" class="form-control datepicker"
+              placeholder="Select Date">
+            <span class="calendar-icon"><i class="far fa-calendar-alt" id="kbdCalendarIcon"></i></span>
+          </div>
+        </div>
+        <!-- Update and Cancel Buttons -->
+        <div class="form-group">
+          <button type="submit" onclick="updateKeyboard()">Update</button>
+          <button type="button" onclick="hideKbdEditDialog()" class="cancel">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function open_kbd_EditForm(kbdId) {
+      // Populate the form fields with Keyboard data
+      // You may use AJAX to fetch the data from the server and populate the fields
+      document.getElementById("KbdId").value = kbdId;
+      // Show the pop-up dialog
+      document.getElementById("kbdEditDialog").style.display = "block";
+    }
+
+    function hideKbdEditDialog() {
+      // Hide the pop-up dialog
+      document.getElementById("kbdEditDialog").style.display = "none";
+    }
+
+    function updateKeyboard() {
+      // You can add logic here to handle form submission if needed
+      // This function can be used to perform any additional processing before submitting the form
+    }
+  </script>
+
+  <!-- Pop-up EditForm for Laptop -->
+  <div id="laptopEditDialog" class="edit-dialog">
+    <div class="container">
+      <form id="laptopEditForm" action="/update_laptop" method="post">
+        <h2>Edit Laptop Data</h2>
+        <!-- Laptop Data Fields -->
+        <input type="hidden" id="LaptopId" name="LaptopId" value="">
+        <div class="form-row-horizontal">
+          <!-- Laptop Data Fields -->
+          <div class="form-group">
+            <label for="Description">Description:</label>
+            <input type="text" id="LaptopDescription" placeholder="Enter Description" name="Description">
+          </div>
+          <div class="form-group">
+            <label for="Unit">Unit:</label>
+            <input type="text" id="LaptopUnit" placeholder="Enter Unit" name="Unit">
+          </div>
+          <div class="form-group">
+            <label for="AddValue">Add Value:</label>
+            <input type="number" id="LaptopAddValue" placeholder="Enter Add Value" name="AddValue" step="any">
+          </div>
+          <div class="form-group">
+            <label for="Target">Target:</label>
+            <input type="number" id="LaptopTarget" placeholder="Enter Target" name="Target">
+          </div>
+          <div class="form-group position-relative">
+            <label for="LaptopDate">Date:</label>
+            <input type="text" id="LaptopDate" name="LaptopDate" class="form-control datepicker"
+              placeholder="Select Date">
+            <span class="calendar-icon"><i class="far fa-calendar-alt" id="laptopCalendarIcon"></i></span>
+          </div>
+        </div>
+        <!-- Update and Cancel Buttons -->
+        <div class="form-group">
+          <button type="submit" onclick="updateLaptop()">Update</button>
+          <button type="button" onclick="hideLaptopEditDialog()" class="cancel">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function open_laptop_EditForm(laptopId) {
+      // Populate the form fields with Laptop data
+      // You may use AJAX to fetch the data from the server and populate the fields
+      document.getElementById("LaptopId").value = laptopId;
+      // Show the pop-up dialog
+      document.getElementById("laptopEditDialog").style.display = "block";
+    }
+
+    function hideLaptopEditDialog() {
+      // Hide the pop-up dialog
+      document.getElementById("laptopEditDialog").style.display = "none";
+    }
+
+    function updateLaptop() {
+      // You can add logic here to handle form submission if needed
+      // This function can be used to perform any additional processing before submitting the form
+    }
+
+  </script>
+  <!-- Datepicker Initialization Script -->
+  <script>
+    $(function () {
+      $(".datepicker").datepicker();
+
+      // Click event for the calendar icon
+      $(".calendar-icon").click(function () {
+        $(this).prev(".datepicker").datepicker("show");
+      });
+    });
+  </script>
+
+
+
+  <!-- Add a hidden div for the graph -->
+  <div id="graphContainer" style="display: none;">
+    <canvas id="myChart"></canvas>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // JavaScript function to clear the filter
+    function clearFilter() {
+      document.getElementById("fromDate").value = "";
+      document.getElementById("toDate").value = "";
+      document.getElementById("filterForm").submit(); // Submit the form to remove the filter
+    }
+
+    // JavaScript function to display the graph
+    function displayGraph() {
+      // Show the graph container
+      document.getElementById("graphContainer").style.display = "block";
+
+      // Get the data from the server using AJAX
+      fetch('/get-graph-data')
+        .then(response => response.json())
+        .then(data => {
+          // Extract data from the JSON response
+          const labels = data.labels;
+          const addValues = data.addValues;
+          const targetValues = data.targetValues;
+
+          // Create a Chart.js chart
+          var ctx = document.getElementById('myChart').getContext('2d');
+          var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Add Value',
+                data: addValues,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+              }, {
+                label: 'Target Value',
+                data: targetValues,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+              }]
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching graph data:', error);
+        });
+    }
+
+  </script>
+  <script src="https://kit.fontawesome.com/b33b219100.js" crossorigin="anonymous"></script>
+
+
+</body>
+
+</html>

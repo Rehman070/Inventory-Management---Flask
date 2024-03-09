@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory - Home</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+  <!-- Data Insertion Message -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  {% for category, message in messages %}
+  <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+    <strong>Message:</strong>{{message}}
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      setTimeout(function () {
+        let alert = document.querySelector(".alert-{{category}}");
+        if (alert) {
+          alert.style.display = "none";
+        }
+      }, 2200); // 2200 milliseconds = 1 second
+    });
+  </script>
+  {% endfor %}
+  {% endif %}
+  {% endwith %}
+
+  <!-- NavBar -->
+  <nav class="navbar navbar-expand-lg bg-body-tertiary" style="margin-top: 0;">
+    <div style="background-color: #51A3C0; padding-top: 10px; padding-bottom: 10px; border-radius: 5px;"
+      class="container-fluid">
+      <a class="navbar-brand" href="/">Stocks</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="inventory">Inventory</a>
+          </li>
+        </ul>
+        <form class="d-flex" role="search">
+          <input style="background-color:#D7EAF1 ;" class="form-control me-2" type="search" placeholder="Search"
+            aria-label="Search">
+          <button style="width: 100px; margin-left: 10px;padding: 3px;border-radius: 10px; margin-right: 10px;"
+            class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Data Posting -->
+  <div class="container">
+    <!-- LCD Data -->
+    <form action="/" method="post">
+      <h2>LCD Data</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="LCD">LCD:</label>
+          <input type="text" id="LCD" value="LCD" name="LCD" readonly>
+        </div>
+        <div class="form-group">
+          <label for="Description">Description:</label>
+          <input type="text" id="Description" placeholder="Enter Description" name="Description">
+        </div>
+        <div class="form-group">
+          <label for="Unit">Unit:</label>
+          <input type="text" id="Unit" placeholder="Enter Unit" name="Unit">
+        </div>
+        <div class="form-group">
+          <label for="AddValue">Add Value:</label>
+          <input type="number" id="AddValue" placeholder="Enter Add Value" name="AddValue" step="any">
+        </div>
+        <div class="form-group">
+          <label for="Target">Target:</label>
+          <input type="number" id="Target" placeholder="Enter Target" name="Target">
+        </div>
+        <div class="form-group position-relative">
+          <label for="LCDDate">Date:</label>
+          <input type="text" id="LCDDate" name="LCDDate" class="form-control datepicker" placeholder="Select Date">
+          <span class="calendar-icon"><i class="far fa-calendar-alt" id="lcdCalendarIcon"></i></span>
+        </div>
+      </div>
+      <div class="form-group">
+        <input type="submit" value="Submit">
+      </div>
+    </form>
+
+    <!-- Keyboard Data -->
+    <form action="/" method="post">
+      <h2>Keyboard Data</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="kbdd">Keyboard:</label>
+          <input type="text" id="kbdd" value="Keyboard" name="kbdd" readonly>
+        </div>
+        <div class="form-group">
+          <label for="Description">Description:</label>
+          <input type="text" id="Description" placeholder="Enter Description" name="Description">
+        </div>
+        <div class="form-group">
+          <label for="Unit">Unit:</label>
+          <input type="text" id="Unit" placeholder="Enter Unit" name="Unit">
+        </div>
+        <div class="form-group">
+          <label for="AddValue">Add Value:</label>
+          <input type="number" id="AddValue" placeholder="Enter Add Value" name="AddValue" step="any">
+        </div>
+        <div class="form-group">
+          <label for="Target">Target:</label>
+          <input type="number" id="Target" placeholder="Enter Target" name="Target">
+        </div>
+        <div class="form-group position-relative">
+          <label for="KeyboardDate">Date:</label>
+          <input type="text" id="KeyboardDate" name="KeyboardDate" class="form-control datepicker"
+            placeholder="Select Date">
+          <span class="calendar-icon"><i class="far fa-calendar-alt" id="keyboardCalendarIcon"></i></span>
+        </div>
+      </div>
+      <div class="form-group">
+        <input type="submit" value="Submit">
+      </div>
+    </form>
+
+    <!-- Laptop Data -->
+    <form action="/" method="post">
+      <h2>Laptop Data</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="laptop">Laptop:</label>
+          <input type="text" id="laptop" value="Laptop" name="laptop" readonly>
+        </div>
+        <div class="form-group">
+          <label for="Description">Description:</label>
+          <input type="text" id="Description" placeholder="Enter Description" name="Description">
+        </div>
+        <div class="form-group">
+          <label for="Unit">Unit:</label>
+          <input type="text" id="Unit" placeholder="Enter Unit" name="Unit">
+        </div>
+        <div class="form-group">
+          <label for="AddValue">Add Value:</label>
+          <input type="number" id="AddValue" placeholder="Enter Add Value" name="AddValue" step="any">
+        </div>
+        <div class="form-group">
+          <label for="Target">Target:</label>
+          <input type="number" id="Target" placeholder="Enter Target" name="Target">
+        </div>
+        <div class="form-group position-relative">
+          <label for="LaptopDate">Date:</label>
+          <input type="text" id="LaptopDate" name="LaptopDate" class="form-control datepicker"
+            placeholder="Select Date">
+          <span class="calendar-icon"><i class="far fa-calendar-alt" id="laptopCalendarIcon"></i></span>
+        </div>
+      </div>
+      <div class="form-group">
+        <input type="submit" value="Submit">
+      </div>
+    </form>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  <script src="https://kit.fontawesome.com/b33b219100.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+
+  <script>
+    $(function () {
+      $(".datepicker").datepicker();
+
+      // Click event for the calendar icon
+      $(".calendar-icon").click(function () {
+        $(this).prev(".datepicker").datepicker("show");
+      });
+    });
+  </script>
+</body>
+
+</html>
